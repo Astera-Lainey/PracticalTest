@@ -4,7 +4,7 @@
     "slug": "PracticalTest",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/T.png",
+    "icon": "./assets/images/T.png", 
     "scheme": "practicaltest",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,

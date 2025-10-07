@@ -26,6 +26,7 @@ const TicketItem = ({ ticket, onEdit, onDelete }: Props) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState<"Created" | "Under Assistance" | "Completed">("Created");
+  const [rating, setRating] = useState<number | null>(0);
 
   // Open Edit Modal
   const handleOpenEdit = (t: ticket) => {
@@ -33,6 +34,7 @@ const TicketItem = ({ ticket, onEdit, onDelete }: Props) => {
     setTitle(t.title);
     setDescription(t.description);
     setStatus(t.status);
+    setRating(t.rating ?? 0);
     setEditModalVisible(true);
   };
 
@@ -44,6 +46,7 @@ const TicketItem = ({ ticket, onEdit, onDelete }: Props) => {
       title,
       description,
       status,
+      rating,
     });
     setEditModalVisible(false);
   };
@@ -92,6 +95,21 @@ const TicketItem = ({ ticket, onEdit, onDelete }: Props) => {
                   </Pressable>
                 );
               })}
+            </View>
+
+            {/* Rating */}
+            <Text style={styles.label}>Rating</Text>
+            <View style={styles.ratingRow}>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Pressable key={star} onPress={() => setRating(star)}>
+                  <MaterialIcons
+                    name={star <= (rating ?? 0) ? "star" : "star-border"}
+                    size={28}
+                    color="#facc15"
+                    style={{ marginRight: 4 }}
+                  />
+                </Pressable>
+              ))}
             </View>
 
             <View style={styles.modalActions}>
@@ -161,6 +179,8 @@ const TicketItem = ({ ticket, onEdit, onDelete }: Props) => {
       </View>
 
       <Text style={styles.desc}>{ticket.description}</Text>
+
+      {/* Status */}
       <Text
         style={{
           color:
@@ -176,6 +196,20 @@ const TicketItem = ({ ticket, onEdit, onDelete }: Props) => {
       >
         {ticket.status}
       </Text>
+
+      {/* Display Rating */}
+      {ticket.rating ? (
+        <View style={styles.ratingRow}>
+          {[1, 2, 3, 4, 5].map((star) => (
+            <MaterialIcons
+              key={star}
+              name={star <= ticket.rating! ? "star" : "star-border"}
+              size={20}
+              color="#facc15"
+            />
+          ))}
+        </View>
+      ) : null}
     </View>
   );
 };
@@ -249,6 +283,10 @@ const styles = StyleSheet.create({
   statusOptionSelected: {
     backgroundColor: "#e0ecff",
     borderColor: "#2563eb",
+  },
+  ratingRow: {
+    flexDirection: "row",
+    marginTop: 8,
   },
   modalActions: {
     flexDirection: "row",

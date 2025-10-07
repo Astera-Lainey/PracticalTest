@@ -1,49 +1,56 @@
 import React, { useState } from "react";
-import { View, FlatList } from "react-native";
+import { View, FlatList, StyleSheet } from "react-native";
 import TicketItem, { ticket } from "../../components/TicketItem";
 
-type Props = {
-  tickets: ticket[];
-  setTickets: React.Dispatch<React.SetStateAction<ticket[]>>;
-};
+const TicketScreen = () => {
+  const [tickets, setTickets] = useState<ticket[]>([
+    {
+      id: "1",
+      title: "App crashes on launch",
+      description: "After tapping icon, app closes immediately.",
+      status: "Created",
+      rating: null,
+    },
+    {
+      id: "2",
+      title: "Unable to login",
+      description: "Sign-in fails with 'Network error' message.",
+      status: "Under Assistance",
+      rating: null,
+    },
+    {
+      id: "3",
+      title: "Feature request: Dark mode",
+      description: "Please add a dark theme option in settings.",
+      status: "Completed",
+      rating: 4,
+    },
+  ]);
 
-const TicketScreen: React.FC<Props> = ({ tickets, setTickets }) => {
-  const [editModalVisible, setEditModalVisible] = useState(false);
-  const [editingTicket, setEditingTicket] = useState<ticket | null>(null);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState<"Created" | "Under Assistance" | "Completed">("Created");
-
-  const handleEdit = (t: ticket) => {
-    setEditingTicket(t);
-    setTitle(t.title);
-    setDescription(t.description);
-    setStatus(t.status);
-    setEditModalVisible(true);
-  };
-
-  const handleSave = () => {
-    if (!editingTicket) return;
+  // Function for editing
+  const handleEdit = (updatedTicket: ticket) => {
     setTickets((prev) =>
-      prev.map((t) =>
-        t.id === editingTicket.id ? { ...t, title, description, status } : t
-      )
+      prev.map((t) => (t.id === updatedTicket.id ? updatedTicket : t))
     );
-    setEditModalVisible(false);
-    setEditingTicket(null);
   };
 
+  // Function to handle delete
   const handleDelete = (t: ticket) => {
     setTickets((prev) => prev.filter((x) => x.id !== t.id));
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <FlatList
         data={tickets}
         keyExtractor={(item) => item.id}
+        contentContainerStyle={{ paddingBottom: 40 }}
         renderItem={({ item }) => (
-          <TicketItem ticket={item} onEdit={handleEdit} onDelete={handleDelete} />
+          <TicketItem
+            ticket={item}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
         )}
       />
     </View>
@@ -51,3 +58,10 @@ const TicketScreen: React.FC<Props> = ({ tickets, setTickets }) => {
 };
 
 export default TicketScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 12,
+  },
+});
