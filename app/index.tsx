@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  StatusBar,
-  Button,
-  Modal,
-  TextInput,
-  View,
-  Text,
-  Alert,
-  ScrollView
-} from "react-native";
+import {StyleSheet,StatusBar,Button,Modal,TextInput,View,Text,Alert,ScrollView} from "react-native";
 import TicketScreen from "./screens/TicketScreen";
 import { ticket } from "../components/TicketItem";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -33,14 +23,15 @@ export default function App() {
     }
 
     const newTicket: ticket = {
-      id: (Math.random() * 100000).toFixed(0), // simple unique id
+      id: (Math.random() * 100000).toFixed(0), 
       title: newTitle.trim(),
       description: newDescription.trim(),
       status: "Created",
       rating: null,
     };
 
-    setTickets((prev) => [newTicket, ...prev]); // prepend new ticket
+    // Adding the new ticket
+    setTickets((prev) => [newTicket, ...prev]); 
     setNewTitle("");
     setNewDescription("");
     setModalVisible(false);
